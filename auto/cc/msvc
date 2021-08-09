@@ -11,8 +11,9 @@
 # MSVC 2015 (14.0)                        cl 19.00
 
 
-NGX_MSVC_VER=`$NGX_WINE $CC 2>&1 | grep 'Compiler Version' 2>&1 \
-                                 | sed -e 's/^.* Version \(.*\)/\1/'`
+
+NGX_MSVC_VER=`$NGX_WINE $CC 2>&1 | grep '优化编译器' 2>&1 \
+                                 | sed -e 's/^.* 优化编译器 \(.*\) 版/\1/'`
 
 echo " + cl version: $NGX_MSVC_VER"
 
