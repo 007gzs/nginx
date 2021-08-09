@@ -224,20 +224,18 @@ ngx_main_link=${MAIN_LINK:+`echo $MAIN_LINK \
 
 cat << END                                                    >> $NGX_MAKEFILE
 
-build:	binary modules manpage
+build:	library binary modules manpage include
 
 binary:		$NGX_OBJS${ngx_dirsep}nginx$ngx_binext
-library:	$NGX_OBJS${ngx_dirsep}libnginx.a $NGX_OBJS${ngx_dirsep}libnginx.so
+library:	$NGX_OBJS${ngx_dirsep}libnginx.a
+include:	
+	rm -rf $NGX_OBJS${ngx_dirsep}include && mkdir $NGX_OBJS${ngx_dirsep}include && cp \$(CORE_DEPS) \$(HTTP_DEPS) $NGX_OBJS${ngx_dirsep}include
 
 $NGX_OBJS${ngx_dirsep}nginx$ngx_binext:	$ngx_deps$ngx_spacer
 	\$(LINK) $ngx_long_start$ngx_binout$NGX_OBJS${ngx_dirsep}nginx$ngx_binext$ngx_long_cont$ngx_objs$ngx_libs$ngx_link$ngx_main_link
 	$ngx_rcc
 $NGX_OBJS${ngx_dirsep}libnginx.a:	$ngx_deps$ngx_spacer
-	\$(AR) rcs $NGX_OBJS${ngx_dirsep}libnginx.a $^ ${LMDB_PATH}/mdb.o ${LMDB_PATH}/midl.o ${MDBX_PATH}/mdbx-static.o ${TTSOBJS}
-	\$(AR) rcs $ngx_long_start$ngx_binout$NGX_OBJS${ngx_dirsep}libnginx.a$ngx_long_cont$ngx_objs$ngx_libs$ngx_link$ngx_main_link
-	$ngx_rcc
-$NGX_OBJS${ngx_dirsep}libnginx.so:	$ngx_deps$ngx_spacer
-	\$(CXX) -shared -Xlinker -export-dynamic -o $ngx_long_start$ngx_binout$NGX_OBJS${ngx_dirsep}libnginx.so$ngx_long_cont$ngx_objs$ngx_libs$ngx_link$ngx_main_link
+	\$(AR) rcs $ngx_long_start$ngx_binout$NGX_OBJS${ngx_dirsep}libnginx.a$ngx_long_cont$ngx_objs
 	$ngx_rcc
 $ngx_long_end
 
